@@ -1,22 +1,24 @@
 <template>
   <div id="app">
-    <h1>Экскурсии по всему миру</h1>
-    <div class="filters">
+    <div class="head-contaner">
+      <img src="./logo.png" alt="img" class="logo-image" />
+      <h1>Экскурсии по всему миру</h1>
       <div class="input-container">
-        <input
-          type="text"
-          placeholder="Введите название экскурсии"
-          v-model="excursionFilter"
-        />
-        <span class="reset-button" @click="clearExcursionFilter" v-if="excursionFilter">✖</span>
+          <input
+          
+            type="text"
+            placeholder="Введите название экскурсии"
+            v-model="excursionFilter"
+            class="excursion-input"
+          />
+          <span class="reset-button" @click="clearExcursionFilter" v-if="excursionFilter">✖</span>
+        <select v-model="selectedCityId">
+          <option value="" disabled selected>Выбрать город</option>
+          <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
+        </select>
       </div>
-      <select v-model="selectedCityId">
-        <option value="" disabled selected>Выбрать город</option>
-        <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
-      </select>
-      <button @click="filterExcursions">Filter</button>
     </div>
-    <div class="excursion-list">
+    <div class="excursion-container">
       <ExcursionCard
         v-for="excursion in displayedExcursions"
         :key="excursion.id"
@@ -24,7 +26,7 @@
       />
     </div>
     <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-    <button v-if="errorMessage" @click="resetFilters">Сбросить фильтры</button>
+    <button v-if="errorMessage" class="error-button" @click="resetFilters">Сбросить фильтры</button>
   </div>
 </template>
 
@@ -116,27 +118,83 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.filters {
-  margin-bottom: 20px;
-}
 
 .input-container {
-  position: relative;
-  display: inline-block;
+  position: relative;  
+  display: inline-block;  
 }
 
-.clear-button {
-  position: absolute;
-  cursor: pointer;
+
+.reset-button {
+  position: absolute; 
+  left: 300px; 
+  top: 50%; 
+  transform: translateY(-50%);  
+  cursor: pointer; 
+  font-size: 16px;
+  color: #888; 
+  user-select: none; 
 }
 
-.excursion-list {
+
+input, select{
+  border-radius: 1px;
+  border-color:  #999999;
+  width: 300px;
+  height: 50px;
+  color: #999999;
+  font-size: 16px;
+  width: 400;
+  margin: auto 15px;
+  text-align: center;
+}
+h1{
+  font-size: 48px;
+  font-weight: 700;
+  color: #000000;
+  margin: 30px auto 50px auto;
+
+}
+
+.head-contaner{
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+
 }
 
+.input-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+
+}
+.excursion-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 50px;
+  margin-top: 90px;
+}
+
+.logo-image {
+  margin-top: 50px;
+}
+
+.error-button{
+  background-color: #00A7FF;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 3px;
+  width: 199px;
+  height: 40px;
+  border: 0;
+
+}
 .error-message {
-  color: red;
+  font-size: 24px;
+  font-weight: 400;
+  color: #000000;
 }
 </style>
