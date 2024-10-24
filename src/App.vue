@@ -12,7 +12,7 @@
             class="excursion-input"
           />
           <span class="reset-button" @click="clearExcursionFilter" v-if="excursionFilter">✖</span>
-        <select v-model="selectedCityId">
+        <select v-model="selectedCityId" >
           <option value="" disabled selected>Выбрать город</option>
           <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
         </select>
@@ -125,16 +125,6 @@ export default defineComponent({
 }
 
 
-.reset-button {
-  position: absolute; 
-  left: 300px; 
-  top: 50%; 
-  transform: translateY(-50%);  
-  cursor: pointer; 
-  font-size: 16px;
-  color: #888; 
-  user-select: none; 
-}
 
 
 input, select{
@@ -144,9 +134,9 @@ input, select{
   height: 50px;
   color: #999999;
   font-size: 16px;
-  width: 400;
   margin: auto 15px;
-  text-align: center;
+  text-align: left; 
+  padding-left: 15px;
 }
 h1{
   font-size: 48px;
@@ -190,11 +180,25 @@ h1{
   width: 199px;
   height: 40px;
   border: 0;
-
+  cursor: pointer;
 }
+
+.reset-button {
+  position: absolute; 
+  left: 300px; 
+  top: 50%; 
+  transform: translateY(-50%);  
+  cursor: pointer; 
+  font-size: 16px;
+  color: #888; 
+  user-select: none; 
+}
+
 .error-message {
   font-size: 24px;
   font-weight: 400;
   color: #000000;
 }
+
+
 </style>
