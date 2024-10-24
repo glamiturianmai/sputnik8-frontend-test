@@ -4,19 +4,35 @@
       <img src="./logo.png" alt="img" class="logo-image" />
       <h1>Экскурсии по всему миру</h1>
       <div class="input-container">
-          <input
-          
-            type="text"
-            placeholder="Введите название экскурсии"
-            v-model="excursionFilter"
-            class="excursion-input"
-          />
+        <div class="excursion">
+            <input
+            
+              type="text"
+              placeholder="Введите название экскурсии"
+              v-model="excursionFilter"
+              class="excursion-input excursion-input"
+              @input="filterExcursions"
+              @focus="showSuggestions = true"
+
+            />
+            <div v-if="showSuggestions && filteredExcursions.length > 0" class="suggestions">
+              <div
+                class="suggestion"
+                v-for="(suggestion, index) in filteredExcursions"
+                :key="index"
+                @click="selectSuggestion(suggestion)"
+              >
+                {{ suggestion.title }}
+              </div>
+            </div>
+        </div>
           <span class="reset-button" @click="clearExcursionFilter" v-if="excursionFilter">✖</span>
         <select v-model="selectedCityId" >
           <option value="" disabled selected>Выбрать город</option>
           <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
         </select>
       </div>
+    
     </div>
     <div class="excursion-container">
       <ExcursionCard
@@ -63,6 +79,16 @@ export default defineComponent({
     const excursionFilter = ref('');
     const selectedCityId = ref<number | null>(null);
     const errorMessage = ref('');
+    const showSuggestions = ref(false);
+
+
+    const filteredExcursions = computed(() => {
+      if (!excursionFilter.value) return [];
+      return excursions.value.filter(excursion => 
+        excursion.title.toLowerCase().includes(excursionFilter.value.toLowerCase())
+      );
+    });
+
 
     const fetchData = async () => {
       try {
@@ -92,6 +118,13 @@ export default defineComponent({
       return filtered;
     });
 
+
+    const selectSuggestion = (suggestion: Excursion) => {
+      excursionFilter.value = suggestion.title; 
+      showSuggestions.value = false; 
+    };
+
+
     const clearExcursionFilter = () => {
       excursionFilter.value = '';
     };
@@ -112,6 +145,9 @@ export default defineComponent({
       errorMessage,
       clearExcursionFilter,
       resetFilters,
+      selectSuggestion,
+      filteredExcursions,
+      showSuggestions,
     };
   },
 });
@@ -121,11 +157,32 @@ export default defineComponent({
 
 .input-container {
   position: relative;  
-  display: inline-block;  
+
 }
 
+.suggestions {
+  position: absolute;
+  top: 54px; 
+  left: 15px; 
+  right: 0; 
+  border: 1px solid #999999;
+  color: #999999;
+  font-size: 16px;
+  background: white; 
+  z-index: 10; 
+  max-height: 150px; 
+  overflow-y: auto; 
+  width: 317px;
+}
 
+.suggestion {
+  padding: 10px 15px 0 15px ; 
+  cursor: pointer; 
+}
 
+.excursion-container {
+  margin-top: 20px; 
+}
 
 input, select{
   border-radius: 1px;
